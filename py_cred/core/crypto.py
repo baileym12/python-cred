@@ -4,4 +4,4 @@ import os
 
 class CryptoManager:
     def __init__(self):
-        self.key = Fernet.generate_key()
+        self._key = Fernet.generate_key()  # Fixed: made key private
