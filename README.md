@@ -4,13 +4,13 @@ A secure command-line tool for managing API keys, tokens, and secrets with encry
 
 ## Features
 
-- 🔐 **Secure Storage**: All secrets are encrypted using Fernet (symmetric encryption)
-- 🔄 **Rotation Policies**: Set up automatic rotation reminders for your secrets
-- 📝 **Audit Logging**: Track all operations with detailed audit logs
-- 🌍 **Environment Support**: Organize secrets by environment (dev, prod, etc.)
-- 🔍 **Secret Types**: Categorize secrets by type (api_key, token, password)
-- 📊 **Filtering & Search**: List and filter secrets by environment and type
-- 🔑 **Master Key Management**: Secure master key storage with rotation support
+- **Secure Storage**: All secrets are encrypted using Fernet (symmetric encryption)
+- **Rotation Policies**: Set up automatic rotation reminders for your secrets
+- **Audit Logging**: Track all operations with detailed audit logs
+- **Environment Support**: Organize secrets by environment (dev, prod, etc.)
+- **Secret Types**: Categorize secrets by type (api_key, token, password)
+- **Filtering & Search**: List and filter secrets by environment and type
+- **Master Key Management**: Secure master key storage with rotation support
 
 ## Installation
 
@@ -198,7 +198,3 @@ pytest
 3. Commit your changes
 4. Push to the branch
 5. Create a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
