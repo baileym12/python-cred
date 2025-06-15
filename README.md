@@ -1,56 +1,204 @@
 # Python Credential Manager
 
-A self-hosted, developer-friendly CLI tool for managing, rotating, and auditing API keys, tokens, and credentials across environments.
+A secure command-line tool for managing API keys, tokens, and secrets with encryption, rotation policies, and audit logging.
 
 ## Features
 
-- 🔐 Secure encryption of credentials using modern cryptographic methods
-- 🔄 Automatic credential rotation based on configurable policies
-- 📝 Comprehensive audit logging
-- 🛡️ Environment-based credential management
-- 🔑 Multiple credential types support (API keys, tokens, passwords)
-- 📊 Rich CLI interface with clear feedback
+- 🔐 **Secure Storage**: All secrets are encrypted using Fernet (symmetric encryption)
+- 🔄 **Rotation Policies**: Set up automatic rotation reminders for your secrets
+- 📝 **Audit Logging**: Track all operations with detailed audit logs
+- 🌍 **Environment Support**: Organize secrets by environment (dev, prod, etc.)
+- 🔍 **Secret Types**: Categorize secrets by type (api_key, token, password)
+- 📊 **Filtering & Search**: List and filter secrets by environment and type
+- 🔑 **Master Key Management**: Secure master key storage with rotation support
 
 ## Installation
 
 ```bash
-pip install -r requirements.txt
+# Clone the repository
+git clone https://github.com/yourusername/python-cred.git
+cd python-cred
+
+# Install the package
+pip install -e .
 ```
 
-## Quick Start
+## Usage
 
-1. Initialize the credential manager:
+### Initialization
+
+First, initialize the credential manager:
+
 ```bash
 python -m py_cred init
 ```
 
-2. Add a new credential:
+This will create the necessary storage structure and generate a master key.
+
+### Storing Secrets
+
+Store a new secret with various options:
+
 ```bash
-python -m py_cred add --name "github-token" --type "api-key" --value "your-secret-value"
+# Basic usage
+python -m py_cred store my-api-key "secret-value"
+
+# With type and environment
+python -m py_cred store my-api-key "secret-value" --type api_key --env prod
+
+# With rotation policy (30 days)
+python -m py_cred store my-api-key "secret-value" --type api_key --env prod --rotation 30
 ```
 
-3. Retrieve a credential:
+Options:
+- `--type`: Secret type (api_key, token, password) [default: api_key]
+- `--env`: Environment (dev, prod, etc.) [default: default]
+- `--rotation`: Days until rotation is required
+
+### Retrieving Secrets
+
+Get a secret's value:
+
 ```bash
-python -m py_cred get --name "github-token"
+python -m py_cred get my-api-key
 ```
+
+If the secret has a rotation policy and is due for rotation, you'll see a warning message.
+
+### Listing Secrets
+
+List all stored secrets:
+
+```bash
+# List all secrets
+python -m py_cred list
+
+# Filter by environment
+python -m py_cred list --env prod
+
+# Filter by type
+python -m py_cred list --type api_key
+```
+
+The output includes:
+- Secret name
+- Type
+- Environment
+- Creation date
+- Last update date
+- Last rotation date (if applicable)
+- Rotation policy (if set)
+
+### Rotating Secrets
+
+Rotate a secret's value:
+
+```bash
+python -m py_cred rotate my-api-key "new-secret-value"
+```
+
+This will:
+1. Update the secret's value
+2. Update the last rotation timestamp
+3. Log the rotation in the audit log
+
+### Deleting Secrets
+
+Remove a secret:
+
+```bash
+python -m py_cred delete my-api-key
+```
+
+### Viewing Audit Logs
+
+View the audit log:
+
+```bash
+python -m py_cred audit_log
+```
+
+The audit log includes:
+- Timestamp
+- Action performed
+- Target secret
+- Additional details
 
 ## Security Features
 
-- Credentials are encrypted at rest using AES-256-GCM
-- Master key is never stored in plaintext
-- Audit logging for all operations
-- Automatic credential rotation policies
-- Environment isolation
+### Encryption
+
+- All secrets are encrypted using Fernet (symmetric encryption)
+- Master key is stored securely
+- Support for master key rotation
+
+### Rotation Policies
+
+- Set mandatory rotation periods for secrets
+- Automatic warnings when rotation is due
+- Tracking of last rotation date
+
+### Audit Logging
+
+- All operations are logged with timestamps
+- Includes action type, target, and details
+- Helps with compliance and security monitoring
+
+## Best Practices
+
+1. **Regular Rotation**
+   - Set up rotation policies for sensitive secrets
+   - Rotate secrets before they expire
+   - Use the `--rotation` flag when storing secrets
+
+2. **Environment Separation**
+   - Use different environments for dev/prod
+   - Keep production secrets separate
+   - Use the `--env` flag to organize secrets
+
+3. **Secret Types**
+   - Categorize secrets by type
+   - Use appropriate types for different secrets
+   - Helps with organization and filtering
+
+4. **Audit Logging**
+   - Regularly review audit logs
+   - Monitor for suspicious activity
+   - Use logs for compliance purposes
 
 ## Development
 
-This project uses:
-- `cryptography` for secure encryption
-- `click` for CLI interface
-- `rich` for beautiful terminal output
-- `pydantic` for data validation
-- `python-dotenv` for configuration management
+### Project Structure
+
+```
+python-cred/
+├── py_cred/
+│   ├── cli/
+│   │   └── main.py
+│   ├── core/
+│   │   ├── crypto.py
+│   │   ├── storage.py
+│   │   └── audit.py
+│   └── __init__.py
+├── tests/
+├── setup.py
+└── README.md
+```
+
+### Running Tests
+
+```bash
+pytest
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## License
 
-MIT License
+This project is licensed under the MIT License - see the LICENSE file for details.
