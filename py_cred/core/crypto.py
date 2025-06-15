@@ -28,3 +28,8 @@ class CryptoManager:
     def decrypt(self, encrypted_data):
         f = Fernet(self._key)
         return f.decrypt(encrypted_data).decode()
+
+    @classmethod
+    def generate_master_key(cls):
+        """Generate a new master key."""
+        return base64.urlsafe_b64encode(os.urandom(32)).decode()
